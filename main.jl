@@ -1,7 +1,7 @@
 # Plotting test
 
 using Plots
-include("./SmoothLivePlot.jl")
+include("./src/SmoothLivePlot.jl")
 gr(show = true)
 
 @userplot DiffusionPlot
@@ -35,12 +35,45 @@ function main(tArray, xArray, D)
     dt = 0.5*dx*dx/D;
     s = D*dt/(dx*dx);
 
-    #YplotObject = smoothLivePlot(xArray, p0, myPlot)
-    YplotObject = @makeSmoothLivePlot myPlot(xArray, p0)
+    YplotObject = smoothLivePlotY(xArray, p0, myPlot)
+    #YplotObject = @makeSmoothLivePlot myPlot(xArray, p0)
     for tt in tArray
         stepTime(p, s, xArray.len)
         YplotObject[] = copy(p)
     end
+end
+function main2(tArray, xArray, D)
+
+    p0 = getInitialDist(xArray)
+    pMax = maximum(p0)
+    p = copy(p0)
+
+    dx = 1/(xArray.len-1);
+    dt = 0.5*dx*dx/D;
+    s = D*dt/(dx*dx);
+
+    XplotObject = smoothLivePlotX(xArray, p0, myPlot)
+    #YplotObject = @makeSmoothLivePlot myPlot(xArray, p0)
+    for tt in tArray
+        XplotObject[] = XplotObject[]*0.99
+    end
+end
+function main3(tArray, xArray, D)
+
+    p0 = getInitialDist(xArray)
+    pMax = maximum(p0)
+    p = copy(p0)
+
+    dx = 1/(xArray.len-1);
+    dt = 0.5*dx*dx/D;
+    s = D*dt/(dx*dx);
+
+    XYplotObject = smoothLivePlotXY(xArray, p0, myPlot)
+    #YplotObject = @makeSmoothLivePlot myPlot(xArray, p0)
+    for tt in tArray
+        XYplotObject[] = [XYplotObject[][1]*1.01, XYplotObject[][2]*0.99]
+    end
+    return XYplotObject
 end
 function getInitialDist(xArray)
     x0 = 0.0
@@ -54,10 +87,11 @@ end
 function myPlot(xx, yy)
     plot(xx, yy, label = "", color = :red)
     scatter!(xx, yy, label = "")
+    xlims!(-5, 5)
     ylims!(0, 1)
     title!("Title")
     xlabel!("X label")
     ylabel!("Y label")
 end
 
-main(tArray, xArray, D)
+testObj = main3(tArray, xArray, D)

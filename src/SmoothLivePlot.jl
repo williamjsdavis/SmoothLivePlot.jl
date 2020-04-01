@@ -6,6 +6,43 @@ function delayPlot(x, y, plotFunction)
     sleep(0.0001)
     plotFunction(x, y)
 end
+function smoothLivePlotY(x, y, plotFunction)
+    data_obs = Observable{Any}(y)
+    plt_obs = Observable{Any}(plotFunction(x, y))
+
+    #map!(yy -> plot(x, yy), plt_obs, data_obs)
+    map!(yy -> delayPlot(x, yy, plotFunction), plt_obs, data_obs)
+
+    ui = dom"div"( plt_obs );
+    display(ui)
+    sleep(0.4)
+    return data_obs
+end
+function smoothLivePlotX(x, y, plotFunction)
+    data_obs = Observable{Any}(x)
+    plt_obs = Observable{Any}(plotFunction(x, y))
+
+    #map!(yy -> plot(x, yy), plt_obs, data_obs)
+    map!(xx -> delayPlot(xx, y, plotFunction), plt_obs, data_obs)
+
+    ui = dom"div"( plt_obs );
+    display(ui)
+    sleep(0.4)
+    return data_obs
+end
+function smoothLivePlotXY(x, y, plotFunction)
+    data_obs = Observable{Any}([x, y])
+    plt_obs = Observable{Any}(plotFunction([], []))
+
+    #map!(yy -> plot(x, yy), plt_obs, data_obs)
+    map!(inArg -> delayPlot(inArg..., myPlot), plt_obs, data_obs)
+
+    ui = dom"div"( plt_obs );
+    display(ui)
+    sleep(0.4)
+    return data_obs
+end
+#=
 function smoothLivePlot(x, y, plotFunction)
     data_obs = Observable{Any}(y)
     plt_obs = Observable{Any}(plotFunction(x, y))
@@ -29,3 +66,4 @@ macro makeSmoothLivePlot(plotExpression)
 
     return newExpression
 end
+=#
