@@ -19,10 +19,10 @@ function testModifyY()
         p[2:end-1] = s.*p[3:nx]-(2*s-1).*p[2:nx-1]+s.*p[1:nx-2];
     end
 
-    YplotObject = @makeSmoothLivePlotGeneral myPlot(xArray, p0)
+    YplotObject = @makeLivePlot myPlot(xArray, p0)
     for tt in tArray
         stepTime(p, s, xArray.len)
-        YplotObject[] = [xArray, copy(p)]
+        replaceMutablePlotElement2!(YplotObject, 2, p)
     end
 end
 function testModifyX()
@@ -30,9 +30,9 @@ function testModifyX()
     p0, xArray, tArray = getInitialDist()
     pMax = maximum(p0)
 
-    XplotObject = @makeSmoothLivePlotGeneral myPlot(xArray, p0)
+    XplotObject = @makeLivePlot myPlot(xArray, p0)
     for tt in tArray
-        XplotObject[] = [XplotObject[][1]*0.99, XplotObject[][2]]
+        replaceMutablePlotElement2!(XplotObject, 1, XplotObject[][1]*0.99)
     end
 end
 function testModifyXY()
@@ -41,9 +41,10 @@ function testModifyXY()
 
     pMax = maximum(p0)
 
-    XYplotObject = @makeSmoothLivePlotGeneral myPlot(xArray, p0)
+    XYplotObject = @makeLivePlot myPlot(xArray, p0)
     for tt in tArray
-        XYplotObject[] = [XYplotObject[][1]*1.01, XYplotObject[][2]*0.99]
+        replaceMutablePlotElement2!(XYplotObject, 1, XYplotObject[][1]*1.01)
+        replaceMutablePlotElement2!(XYplotObject, 2, XYplotObject[][2]*0.99)
     end
 end
 function testModifyZ()
@@ -56,12 +57,12 @@ function testModifyZ()
     Y = repeat(y, 1, length(x))
     Z = map((x, y) -> f(x, y, 0.0), X, Y)
 
-    ZplotObject = @makeSmoothLivePlotGeneral myPlotZ(x, y, Z)
+    ZplotObject = @makeLivePlot myPlotZ(x, y, Z)
 
     ttt = 0.0:0.1:1.0
     for tt in ttt
         Z = map((x, y) -> f(x, y, tt), X, Y)
-        ZplotObject[] = [x, y, Z]
+        replaceMutablePlotElement2!(ZplotObject, 3, Z)
     end
 end
 function testModifyXText()
@@ -72,12 +73,11 @@ function testModifyXText()
     p = copy(p0)
     titleText = "Title, step: "
 
-    XtextPlotObject = @makeSmoothLivePlotGeneral myPlotTitle(xArray, p0, titleText)
-    for tt in 1:length(tArray)
-        XtextPlotObject[] = [XtextPlotObject[][1]*0.99, XtextPlotObject[][2], string(titleText, tt)]
-
-        #replaceMutablePlotElement!(XtextPlotObject, 3, string(titleText, tt))
-        #@replaceMutablePlotElement2 XtextPlotObject(3, string(titleText, tt))
+    XtextPlotObject = @makeLivePlot myPlotTitle(xArray, p0, titleText)
+    #for tt in 1:length(tArray)
+    for tt in 1:50
+        replaceMutablePlotElement2!(XtextPlotObject, 3, string(titleText, tt))
+        replaceMutablePlotElement2!(XtextPlotObject, 1, XtextPlotObject[][1]*0.99)
     end
     return XtextPlotObject
 end
@@ -127,8 +127,8 @@ function myPlotZ(xx, yy, ZZ)
     ylabel!("Y label")
 end
 
-testModifyY()
+#testModifyY()
 #testModifyX()
 #testModifyXY()
 #testModifyZ()
-#testModifyXText()
+testModifyXText()
