@@ -1,73 +1,6 @@
 ## Smooth live plot
 using Observables, WebIO
 
-function delayPlot2(plotFunction, inArgs...)
-    sleep(0.0001)
-    plotFunction(inArgs...)
-end
-function smoothLivePlotY(x, y, plotFunction)
-    data_obs = Observable{Any}(y)
-    plt_obs = Observable{Any}(plotFunction(x, y))
-
-    map!(yy -> delayPlot2(plotFunction, x, yy), plt_obs, data_obs)
-
-    ui = dom"div"(plt_obs);
-    display(ui)
-    sleep(0.4)
-    return data_obs
-end
-function smoothLivePlotX(x, y, plotFunction)
-    data_obs = Observable{Any}(x)
-    plt_obs = Observable{Any}(plotFunction(x, y))
-
-    map!(xx -> delayPlot2(plotFunction, xx, y), plt_obs, data_obs)
-
-    ui = dom"div"(plt_obs);
-    display(ui)
-    sleep(0.4)
-    return data_obs
-end
-function smoothLivePlotXY(x, y, plotFunction)
-    data_obs = Observable{Any}([x, y])
-    plt_obs = Observable{Any}(plotFunction([], []))
-
-    map!(inArg -> delayPlot2(plotFunction, inArg...), plt_obs, data_obs)
-
-    ui = dom"div"(plt_obs);
-    display(ui)
-    sleep(0.4)
-    return data_obs
-end
-function smoothLivePlotZ(x, y, z, plotFunction)
-    data_obs = Observable{Any}(z)
-    plt_obs = Observable{Any}(plotFunction(x, y, z))
-
-    map!(zz -> delayPlot2(plotFunction, x, y, zz), plt_obs, data_obs)
-
-    ui = dom"div"(plt_obs);
-    display(ui)
-    sleep(0.4)
-    return data_obs
-end
-mutable struct changableArguments
-    x
-    y
-    titleText
-end
-function smoothLivePlotXtext(plotFunction, inArgs)
-    x = inArgs[1]
-    y = inArgs[2]
-    titleText = inArgs[3]
-    data_obs = Observable{Any}(inArgs)
-    plt_obs = Observable{Any}(plotFunction(inArgs...))
-
-    map!(mapArg -> plotFunction(mapArg...), plt_obs, data_obs)
-
-    ui = dom"div"(plt_obs);
-    display(ui)
-    sleep(0.4)
-    return data_obs
-end
 function smoothLivePlotGeneral(plotFunction, plotArgs)
     data_obs = Observable{Any}(plotArgs)
     plt_obs = Observable{Any}(plotFunction(plotArgs...))
@@ -93,19 +26,20 @@ macro replaceMutablePlotElement2(inArg)
     #println(newExpression)
     return newExpression
 end
-#=
-function smoothLivePlot(x, y, plotFunction)
-    data_obs = Observable{Any}(y)
-    plt_obs = Observable{Any}(plotFunction(x, y))
+macro makeSmoothLivePlotGeneral(plotExpression)
+    # Turn plotting function into smooth version
 
-    #map!(yy -> plot(x, yy), plt_obs, data_obs)
-    map!(yy -> delayPlot(x, yy, plotFunction), plt_obs, data_obs)
+    plotFunction = plotExpression.args[1]
+    plotArgs = plotExpression.args[2:end]
 
-    ui = dom"div"( plt_obs );
-    display(ui)
-    sleep(0.4)
-    return data_obs
+    arrayArgs = map(x -> :($(esc(x))), plotArgs)
+    splatArgs = :([$(arrayArgs...)])
+
+    outExpression = :(smoothLivePlotGeneral($plotFunction, $splatArgs))
+
+    return outExpression
 end
+#=
 macro makeSmoothLivePlot(plotExpression)
     # Turn plotting function into smooth version
 
