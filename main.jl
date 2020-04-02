@@ -38,27 +38,25 @@ function main(tArray, xArray, D)
         p[2:end-1] = s.*p[3:nx]-(2*s-1).*p[2:nx-1]+s.*p[1:nx-2];
     end
 
-    YplotObject = smoothLivePlotY(xArray, p0, myPlot)
-    #YplotObject = @makeSmoothLivePlot myPlot(xArray, p0)
+    YplotObject = smoothLivePlotGeneral(myPlot, [xArray, p0])
     for tt in tArray
         stepTime(p, s, xArray.len)
-        YplotObject[] = copy(p)
+        YplotObject[] = [xArray, copy(p)]
     end
 end
 function main2(tArray, xArray, D)
     p0 = getInitialDist(xArray)
     pMax = maximum(p0)
-    XplotObject = smoothLivePlotX(xArray, p0, myPlot)
-    #YplotObject = @makeSmoothLivePlot myPlot(xArray, p0)
+    XplotObject = smoothLivePlotGeneral(myPlot, [xArray, p0])
     for tt in tArray
-        XplotObject[] = XplotObject[]*0.99
+        XplotObject[] = [XplotObject[][1]*0.99, XplotObject[][2]]
     end
 end
 function main3(tArray, xArray, D)
     p0 = getInitialDist(xArray)
     pMax = maximum(p0)
-    XYplotObject = smoothLivePlotXY(xArray, p0, myPlot)
-    #YplotObject = @makeSmoothLivePlot myPlot(xArray, p0)
+
+    XYplotObject = smoothLivePlotGeneral(myPlot, [xArray, p0])
     for tt in tArray
         XYplotObject[] = [XYplotObject[][1]*1.01, XYplotObject[][2]*0.99]
     end
@@ -72,12 +70,12 @@ function main4(tArray, xArray, D)
     X = repeat(reshape(x, 1, :), length(y), 1)
     Y = repeat(y, 1, length(x))
     Z = map((x, y) -> f(x, y, 0.0), X, Y)
-    ZplotObject = smoothLivePlotZ(x, y, Z, myPlotZ)
-    #YplotObject = @makeSmoothLivePlot myPlot(xArray, p0)
+
+    ZplotObject = smoothLivePlotGeneral(myPlotZ, [x, y, Z])
     ttt = 0.0:0.1:1.0
     for tt in ttt
         Z = map((x, y) -> f(x, y, tt), X, Y)
-        ZplotObject[] = [Z]
+        ZplotObject[] = [x, y, Z]
     end
 end
 function main5(tArray, xArray, D)
@@ -86,17 +84,14 @@ function main5(tArray, xArray, D)
     p = copy(p0)
     titleText = "Title, step: "
 
-    XtextPlotObject = smoothLivePlotXtext(myPlotTitle, [xArray, p0, titleText], (true, false, true))
-    #YplotObject = @makeSmoothLivePlot myPlot(xArray, p0)
+    XtextPlotObject = smoothLivePlotGeneral(myPlotTitle, [xArray, p0, titleText])
     for tt in 1:length(tArray)
-        #XtextPlotObject[] = [XtextPlotObject[][1]*0.99, string(titleText, tt)]
-        #XtextPlotObject[] = [XtextPlotObject[][1]*0.99, XtextPlotObject[][2], string(titleText, tt)]
-        replaceMutablePlotElement!(XtextPlotObject, 3, string(titleText, tt))
+        XtextPlotObject[] = [XtextPlotObject[][1]*0.99, XtextPlotObject[][2], string(titleText, tt)]
+
+        #replaceMutablePlotElement!(XtextPlotObject, 3, string(titleText, tt))
+        #@replaceMutablePlotElement2 XtextPlotObject(3, string(titleText, tt))
     end
     return XtextPlotObject
-end
-function replaceMutablePlotElement!(MutablePlotArray, ind, agr3)
-    MutablePlotArray[] = [MutablePlotArray[][1], MutablePlotArray[][2], agr3] # Make into a macro?
 end
 function getInitialDist(xArray)
     x0 = 0.0
@@ -105,6 +100,7 @@ function getInitialDist(xArray)
     p = f.(xArray)
 end
 function myPlot(xx, yy)
+    sleep(0.0001)
     plot(xx, yy, label = "", color = :red)
     scatter!(xx, yy, label = "")
     xlims!(-5, 5)
@@ -124,10 +120,11 @@ function myPlotTitle(xx, yy, titleText)
     ylabel!("Y label")
 end
 function myPlotZ(xx, yy, ZZ)
+    sleep(0.0001)
     p1 = contour(xx, yy, ZZ, fill = true, clims=(0,300));
     title!("Title")
     xlabel!("X label")
     ylabel!("Y label")
 end
 
-main5(tArray, xArray, D)
+main(tArray, xArray, D)

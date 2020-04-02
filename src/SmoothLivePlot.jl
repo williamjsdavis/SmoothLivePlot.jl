@@ -54,34 +54,13 @@ mutable struct changableArguments
     y
     titleText
 end
-function smoothLivePlotXtext(plotFunction, inArgs, boolTuple)
+function smoothLivePlotXtext(plotFunction, inArgs)
     x = inArgs[1]
     y = inArgs[2]
     titleText = inArgs[3]
-    mutableArgs = [boolTuple...]
-    immutableArgs = [.!boolTuple...]
-    mutableArray = inArgs[mutableArgs]
-
-    #data_obs = Observable{Any}(mutableArray)
     data_obs = Observable{Any}(inArgs)
-    plt_obs = Observable{Any}(plotFunction(x, y, titleText))
+    plt_obs = Observable{Any}(plotFunction(inArgs...))
 
-    function agrToMutableArgs(inArgs, mutableArgs, mapArgi)
-        outArgs = similar(inArgs)
-        j = 1
-        for ii in 1:length(inArgs)
-            if mutableArgs[ii]
-                outArgs[ii] = mapArgi[j]
-                j = j + 1
-            else
-                outArgs[ii] = inArgs[ii]
-            end
-        end
-        return outArgs
-    end
-
-    #map!(mapArg -> delayPlot2(plotFunction, mapArg[1], y, mapArg[2]), plt_obs, data_obs)
-    #map!(mapArg -> plotFunction(agrToMutableArgs(inArgs, mutableArgs, mapArg)...), plt_obs, data_obs)
     map!(mapArg -> plotFunction(mapArg...), plt_obs, data_obs)
 
     ui = dom"div"(plt_obs);
@@ -89,29 +68,30 @@ function smoothLivePlotXtext(plotFunction, inArgs, boolTuple)
     sleep(0.4)
     return data_obs
 end
-function agrToMutableArgs2(inArgs, mutableArgs, mapArgi)
-    outArgs = similar(inArgs)
-    j = 1
-    for ii in 1:length(inArgs)
-        if mutableArgs[ii]
-            outArgs[ii] = mapArgi[j]
-            j = j + 1
-        else
-            outArgs[ii] = inArgs[ii]
-        end
-    end
-    return outArgs
-end
 function smoothLivePlotGeneral(plotFunction, plotArgs)
-    data_obs = Observable{Any}(z)
-    plt_obs = Observable{Any}(plotFunction(x, y, z))
+    data_obs = Observable{Any}(plotArgs)
+    plt_obs = Observable{Any}(plotFunction(plotArgs...))
+    map!(mapArg -> plotFunction(mapArg...), plt_obs, data_obs)
 
-    map!(zz -> delayPlot2(plotFunction, x, y, zz), plt_obs, data_obs)
-
+    # Create figure
     ui = dom"div"(plt_obs);
     display(ui)
     sleep(0.4)
     return data_obs
+end
+function replaceMutablePlotElement!(MutablePlotArray, ind, agr3)
+    MutablePlotArray[] = [MutablePlotArray[][1], MutablePlotArray[][2], agr3] # Make into a macro?
+end
+macro replaceMutablePlotElement2(inArg)
+    objectSymbol = inArg.args[1]
+    mutableIndex = inArg.args[2]
+    targetChange = inArg.args[3]
+    #println(typeof(objectSymbol))
+
+    newExpression = :($(esc(objectSymbol))[] = [$(esc(objectSymbol))[][1], $(esc(objectSymbol))[][2], $(esc(targetChange))])
+
+    #println(newExpression)
+    return newExpression
 end
 #=
 function smoothLivePlot(x, y, plotFunction)
