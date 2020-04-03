@@ -27,7 +27,7 @@ Currently, I have tested the following capabilities:
 3. Modify plot elements with function `modifyPlotObject!(outPlotObject, arg2 = newArg2, arg1 = newArg1, ...)`. 
    - The first argment of `modifyPlotObject!()` must be the mutable output array.
    - The following argments are optional and named. The name/value pair must be `arg<x> = newArg1`, where `<x>` in the name is an integer that indicates the position of the argument in the original plotting function `myPlotFunction()`. 
-   - E.g. to modify `arguement2` to `newArguement2`, use `modifyPlotObject!(outPlotObject, arg2 = newArguement2)`.
+   - E.g. to modify `argument2` to `newArgument2`, use `modifyPlotObject!(outPlotObject, arg2 = newArgument2)`.
 
 ### Short example
 
