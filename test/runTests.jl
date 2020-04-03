@@ -2,6 +2,7 @@
 using Plots
 using SmoothLivePlot
 using Test
+include("testPlotFunctions.jl")
 gr(show = true)
 
 # Test macro
