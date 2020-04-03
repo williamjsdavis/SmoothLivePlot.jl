@@ -2,3 +2,7 @@ name = "SmoothLivePlot"
 uuid = "31434429-0e9f-4d24-947a-14cd43782323"
 authors = ["william davis <williamjsdavis@berkeley.edu>"]
 version = "0.1.0"
+
+[deps]
+Observables = "510215fc-4207-5dde-b226-833fc4488ee2"
+WebIO = "0f1e0344-ec1d-5b48-a673-e5cf874b6c29"

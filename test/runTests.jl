@@ -1,6 +1,6 @@
 # Testing plot examples
 using Plots
-using LivePlotSmooth
+using SmoothLivePlot
 using Test
 gr(show = true)
 
