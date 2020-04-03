@@ -71,7 +71,33 @@ function testModifyXText()
     for tt in 1:50
         modifyPlotObject!(XtextPlotObject, arg3 = string(titleText, tt), arg1 = XtextPlotObject[][1]*0.99)
     end
-    return XtextPlotObject
+end
+function testModifyXColour()
+
+    p0, xArray, tArray = getInitialDist()
+
+    pMax = maximum(p0)
+    p = copy(p0)
+    scatterColour = range(0, 1, length=50)
+
+    XColourPlotObject = @makeLivePlot myPlotColour(xArray, p0, scatterColour[1])
+
+    for tt in 1:50
+        modifyPlotObject!(XColourPlotObject, arg3 = scatterColour[tt], arg1 = XColourPlotObject[][1]*0.99)
+    end
+end
+function testAddXY()
+
+    p0, xArray, tArray = getInitialDist()
+
+    pMax = maximum(p0)
+    p = copy(p0)
+
+    addXYPlotObject = @makeLivePlot myPlot(xArray, p0)
+
+    for tt in 1:length(xArray)
+        modifyPlotObject!(addXYPlotObject, arg1 = xArray[1:tt], arg2 = p0[1:tt])
+    end
 end
 function getInitialDist()
     tStart = 0.0
@@ -108,6 +134,16 @@ function myPlotTitle(xx, yy, titleText)
     xlims!(-5, 5)
     ylims!(0, 1)
     title!(titleText)
+    xlabel!("X label")
+    ylabel!("Y label")
+end
+function myPlotColour(xx, yy, cc)
+    sleep(0.0001)
+    plot(xx, yy, label = "", color = :red)
+    scatter!(xx, yy, markersize = 20, color = RGBA(cc, 0.5, 0, 0), label = "")
+    xlims!(-5.5, 5.5)
+    ylims!(-0.1, 1.2)
+    title!("Title text")
     xlabel!("X label")
     ylabel!("Y label")
 end

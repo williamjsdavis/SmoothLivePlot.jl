@@ -33,6 +33,12 @@ function main()
         @testset "Modify X+Text" begin
             @test @no_error testModifyXText()
         end
+        @testset "Modify X+Colour" begin
+            @test @no_error testModifyXColour()
+        end
+        @testset "Add to X+Y" begin
+            @test @no_error testAddXY()
+        end
     end
 end
 
