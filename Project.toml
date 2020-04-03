@@ -1,0 +1,4 @@
+name = "SmoothLivePlot"
+uuid = "31434429-0e9f-4d24-947a-14cd43782323"
+authors = ["william davis <williamjsdavis@berkeley.edu>"]
+version = "0.1.0"

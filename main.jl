@@ -1,6 +1,6 @@
 ## Plotting examples
 using Plots
-using LivePlotSmooth
+using SmoothLivePlot
 include("./test/testPlotFunctions.jl")
 gr(show = true)
 

@@ -1,5 +1,4 @@
-# Smooth live plot
-module LivePlotSmooth
+module SmoothLivePlot
 
 using Observables, WebIO
 
