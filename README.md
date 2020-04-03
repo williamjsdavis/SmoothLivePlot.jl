@@ -28,6 +28,7 @@ Currently, I have tested the following capabilities:
    - The first argment of `modifyPlotObject!()` must be the mutable output array.
    - The following argments are optional and named. The name/value pair must be `arg<x> = newArg1`, where `<x>` in the name is an integer that indicates the position of the argument in the original plotting function `myPlotFunction()`. 
    - E.g. to modify `argument2` to `newArgument2`, use `modifyPlotObject!(outPlotObject, arg2 = newArgument2)`.
+   - The modified arguments do not have to be in any specific order, and are updated at the same time.
 
 ### Short example
 
