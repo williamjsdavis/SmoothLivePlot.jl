@@ -16,3 +16,14 @@ Updating the plot plane in Juno sometimes gives a blinking effect.
    - The following argments are optional named of `modifyPlotObject!()` must be the mutable output array.
 
 ### Short example
+
+Here's a video showing an output live-plot from some magnetohydrodynamic calculations:
+
+![exampleSmoothPlot](https://user-images.githubusercontent.com/38541020/78403408-27771c00-75b1-11ea-9bef-063e8612720d.gif)
+
+# TODOs
+- [ ] Add capability to add additional elements to plots.
+- [ ] Benchmark performance.
+
+# Changelog
+- Version 0.1.0 - Introduced original version.
