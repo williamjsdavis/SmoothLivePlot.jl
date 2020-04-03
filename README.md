@@ -19,6 +19,8 @@ Currently, I have tested the following capabilities:
 - Modifying text elements (e.g. titles, xlabels, etc...)
 - Modifying matricies in contour plots
 
+Note: this package is designed to work with the __plot plane in Juno__. If you force it to plot in a gui it will look really weird.
+
 # Using the package
 1. Import the module using `using SmoothLivePlot`. 
 2. Create a live plot with macro `outPlotObject = @makeLivePlot myPlotFunction(argument1, argument2, ...)`.
