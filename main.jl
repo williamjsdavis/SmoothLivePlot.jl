@@ -22,7 +22,7 @@ function testModifyY()
     YplotObject = @makeLivePlot myPlot(xArray, p0)
     for tt in tArray
         stepTime(p, s, xArray.len)
-        replaceMutablePlotElement2!(YplotObject, 2, p)
+        replaceMutablePlotElement3!(YplotObject, arg2 = p)
     end
 end
 function testModifyX()
@@ -32,7 +32,7 @@ function testModifyX()
 
     XplotObject = @makeLivePlot myPlot(xArray, p0)
     for tt in tArray
-        replaceMutablePlotElement2!(XplotObject, 1, XplotObject[][1]*0.99)
+        replaceMutablePlotElement3!(XplotObject, arg1 = XplotObject[][1]*0.99)
     end
 end
 function testModifyXY()
@@ -43,8 +43,7 @@ function testModifyXY()
 
     XYplotObject = @makeLivePlot myPlot(xArray, p0)
     for tt in tArray
-        replaceMutablePlotElement2!(XYplotObject, 1, XYplotObject[][1]*1.01)
-        replaceMutablePlotElement2!(XYplotObject, 2, XYplotObject[][2]*0.99)
+        replaceMutablePlotElement3!(XYplotObject, arg2 = XYplotObject[][2]*0.99, arg1 = XYplotObject[][1]*1.01)
     end
 end
 function testModifyZ()
@@ -62,7 +61,7 @@ function testModifyZ()
     ttt = 0.0:0.1:1.0
     for tt in ttt
         Z = map((x, y) -> f(x, y, tt), X, Y)
-        replaceMutablePlotElement2!(ZplotObject, 3, Z)
+        replaceMutablePlotElement3!(ZplotObject, arg3 = Z)
     end
 end
 function testModifyXText()
@@ -74,10 +73,8 @@ function testModifyXText()
     titleText = "Title, step: "
 
     XtextPlotObject = @makeLivePlot myPlotTitle(xArray, p0, titleText)
-    #for tt in 1:length(tArray)
     for tt in 1:50
-        replaceMutablePlotElement2!(XtextPlotObject, 3, string(titleText, tt))
-        replaceMutablePlotElement2!(XtextPlotObject, 1, XtextPlotObject[][1]*0.99)
+        replaceMutablePlotElement3!(XtextPlotObject, arg3 = string(titleText, tt), arg1 = XtextPlotObject[][1]*0.99)
     end
     return XtextPlotObject
 end
@@ -131,4 +128,4 @@ end
 #testModifyX()
 #testModifyXY()
 #testModifyZ()
-testModifyXText()
+#testModifyXText()
