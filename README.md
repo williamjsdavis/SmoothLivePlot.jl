@@ -4,14 +4,12 @@
 
 # Motivation
 
-Updating the plot plane in Juno sometimes gives a blinking effect. Links to posts:
+Updating the Juno plot plane during calculations creates new plots on top of the old ones. This produces a flickering effect e.g.:
 
 - [Can you update a plot in Julia?](https://discourse.julialang.org/t/current-state-of-live-plots-in-atom-juno/30379)
 - [Current State of Live Plots in Atom/Juno?](https://discourse.julialang.org/t/current-state-of-live-plots-in-atom-juno/30379/5)
 
-This may be a specific Juno + Apple product issue (e.g. [Suppress Plot Window when output to animation](https://discourse.julialang.org/t/suppress-plot-window-when-output-to-animation/30724)).
-
-To address this issue, I generalised a [solution found by user ckneale](https://discourse.julialang.org/t/current-state-of-live-plots-in-atom-juno/30379/7). It uses [Observables.jl](https://github.com/JuliaGizmos/Observables.jl) and [WebIO.jl](https://github.com/JuliaGizmos/WebIO.jl) so that the plot can listen to changes in its elements.
+To smoothly update of plots, I generalised a [solution found by user ckneale](https://discourse.julialang.org/t/current-state-of-live-plots-in-atom-juno/30379/7). It uses [Observables.jl](https://github.com/JuliaGizmos/Observables.jl) and [WebIO.jl](https://github.com/JuliaGizmos/WebIO.jl) so that the plot can listen to changes in its elements.
 
 Currently, I have tested the following capabilities: 
 - Modifying values in X and/or Y array(s) in scatter and plot
