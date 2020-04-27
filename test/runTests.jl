@@ -40,6 +40,9 @@ function main()
         @testset "Add to X+Y" begin
             @test @no_error testAddXY()
         end
+        @testset "Add to X+Y+Z" begin
+            @test @no_error testAddXYZ()
+        end
     end
 end
 

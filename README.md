@@ -17,6 +17,9 @@ Currently, I have tested the following capabilities:
 - Modifying colours in scatter and plot
 - Modifying text elements (e.g. titles, xlabels, etc...)
 - Modifying matricies in contour plots
+- Adding new elements to X,Y arrays in 2d line and scatter plots 
+- Adding new elements to X,Y,Z in 3d line and scatter plots
+
 
 Note: this package is designed to work with the __plot plane in Juno__. If you force it to plot in a gui it will look really weird.
 

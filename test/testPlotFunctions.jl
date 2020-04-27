@@ -99,6 +99,27 @@ function testAddXY()
         modifyPlotObject!(addXYPlotObject, arg1 = xArray[1:tt], arg2 = p0[1:tt])
     end
 end
+function testAddXYZ()
+
+    attractor = Lorenz()
+    plt = plot3d(
+        1,
+        xlim = (-30, 30),
+        ylim = (-30, 30),
+        zlim = (0, 60),
+        title = "Lorenz Attractor",
+        label = "",
+        marker = 2,
+    )
+
+    addXYZPlotObject = @makeLivePlot myPlotXYZ(plt)
+
+    for tt in 1:500
+        step!(attractor)
+        push!(plt, attractor.x, attractor.y, attractor.z)
+        modifyPlotObject!(addXYZPlotObject, arg1 = plt)
+    end
+end
 function getInitialDist()
     tStart = 0.0
     tEnd = 2.0
@@ -116,6 +137,20 @@ function getInitialDist()
     p = f.(xArray)
 
     return p, xArray, tArray
+end
+Base.@kwdef mutable struct Lorenz
+    dt::Float32 = 0.02
+    σ::Float32 = 10
+    ρ::Float32 = 28
+    β::Float32 = 8/3
+    x::Float32 = 1
+    y::Float32 = 1
+    z::Float32 = 1
+end
+function step!(l::Lorenz)
+    dx = l.σ * (l.y - l.x);         l.x += l.dt * dx
+    dy = l.x * (l.ρ - l.z) - l.y;   l.y += l.dt * dy
+    dz = l.x * l.y - l.β * l.z;     l.z += l.dt * dz
 end
 function myPlot(xx, yy)
     sleep(0.0001)
@@ -153,4 +188,19 @@ function myPlotZ(xx, yy, ZZ)
     title!("Title")
     xlabel!("X label")
     ylabel!("Y label")
+end
+function myPlotXYZ(pltObj)
+    sleep(0.0001)
+    xx = getindex(pltObj.series_list[1].plotattributes, :x)
+    yy = getindex(pltObj.series_list[1].plotattributes, :y)
+    zz = getindex(pltObj.series_list[1].plotattributes, :z)
+    plot3d(
+        xx, yy, zz,
+        xlim = (-30, 30),
+        ylim = (-30, 30),
+        zlim = (0, 60),
+        title = "Lorenz Attractor",
+        label = "",
+        marker = 2,
+    )
 end
