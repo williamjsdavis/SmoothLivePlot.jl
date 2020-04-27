@@ -1,6 +1,5 @@
 ## Test plot functions
 function testModifyY()
-
     p0, xArray, tArray = getInitialDist()
 
     pMax = maximum(p0)
@@ -21,7 +20,6 @@ function testModifyY()
     end
 end
 function testModifyX()
-
     p0, xArray, tArray = getInitialDist()
     pMax = maximum(p0)
 
@@ -31,7 +29,6 @@ function testModifyX()
     end
 end
 function testModifyXY()
-
     p0, xArray, tArray = getInitialDist()
 
     pMax = maximum(p0)
@@ -60,7 +57,6 @@ function testModifyZ()
     end
 end
 function testModifyXText()
-
     p0, xArray, tArray = getInitialDist()
 
     pMax = maximum(p0)
@@ -73,7 +69,6 @@ function testModifyXText()
     end
 end
 function testModifyXColour()
-
     p0, xArray, tArray = getInitialDist()
 
     pMax = maximum(p0)
@@ -87,7 +82,6 @@ function testModifyXColour()
     end
 end
 function testAddXY()
-
     p0, xArray, tArray = getInitialDist()
 
     pMax = maximum(p0)
@@ -100,7 +94,6 @@ function testAddXY()
     end
 end
 function testAddXYZ()
-
     attractor = Lorenz()
     plt = plot3d(
         1,
@@ -154,40 +147,55 @@ function step!(l::Lorenz)
 end
 function myPlot(xx, yy)
     sleep(0.0001)
-    plot(xx, yy, label = "", color = :red)
+    plot(
+        xx, yy,
+        label = "",
+        color = :red,
+        xlim = (-5, 5),
+        ylim = (0, 1),
+        title = "Title",
+        xlabel = "X label",
+        ylabel = "Y label"
+    )
     scatter!(xx, yy, label = "")
-    xlims!(-5, 5)
-    ylims!(0, 1)
-    title!("Title")
-    xlabel!("X label")
-    ylabel!("Y label")
 end
 function myPlotTitle(xx, yy, titleText)
     sleep(0.0001)
-    plot(xx, yy, label = "", color = :red)
+    plot(
+        xx, yy,
+        label = "",
+        color = :red,
+        xlim = (-5, 5),
+        ylim = (0, 1),
+        title = titleText,
+        xlabel = "X label",
+        ylabel = "Y label"
+    )
     scatter!(xx, yy, label = "")
-    xlims!(-5, 5)
-    ylims!(0, 1)
-    title!(titleText)
-    xlabel!("X label")
-    ylabel!("Y label")
 end
 function myPlotColour(xx, yy, cc)
     sleep(0.0001)
-    plot(xx, yy, label = "", color = :red)
+    plot(
+        xx, yy,
+        label = "",
+        color = :red,
+        xlim = (-5, 5),
+        ylim = (0, 1),
+        title = "Title text",
+        xlabel = "X label",
+        ylabel = "Y label"
+        )
     scatter!(xx, yy, markersize = 20, color = RGBA(cc, 0.5, 0, 0), label = "")
-    xlims!(-5.5, 5.5)
-    ylims!(-0.1, 1.2)
-    title!("Title text")
-    xlabel!("X label")
-    ylabel!("Y label")
 end
 function myPlotZ(xx, yy, ZZ)
     sleep(0.0001)
-    p1 = contour(xx, yy, ZZ, fill = true, clims=(0,300));
-    title!("Title")
-    xlabel!("X label")
-    ylabel!("Y label")
+    p1 = contour(
+        xx, yy, ZZ,
+        fill = true, clims=(0,300),
+        title = "Title text",
+        xlabel = "X label",
+        ylabel = "Y label"
+    );
 end
 function myPlotXYZ(pltObj)
     sleep(0.0001)
